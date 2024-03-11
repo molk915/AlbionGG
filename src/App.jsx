@@ -4,7 +4,7 @@ import axios from "axios";
 function App() {
   const [tier, setTier] = useState("4");
   const [enchants, setEnchants] = useState("0");
-  const [Location, setLocation] = useState("");
+  const [location, setLocation] = useState("");
   const getItems = async () => {
     const apiUrl = `http://localhost:5000/items/${tier}/${enchants}/${location}`;
     console.log("API URL:", apiUrl); // Wypisanie adresu URL na konsoli

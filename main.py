@@ -17,7 +17,7 @@ def searchitem(location, itemname, tier, enchants, quality):
         print("Failed to retrieve data")
         return None
 
-@app.route('/items/<tier>/<enchants>', methods=['GET'])  
+@app.route('/items/<tier>/<enchants>/<location>', methods=['GET'])  
 def get_items(tier, enchants, location):
     itemname = request.args.get('itemname', 'BAG')
     quality = request.args.get('quality', '')
