@@ -22,6 +22,7 @@ function App() {
   return (
     <>
       <h1>Item Prices</h1>
+      <input type="text" />
       <select value={tier} onChange={(e) => setTier(e.target.value)}>
         <option value="4">Tier 4</option>
         <option value="5">Tier 5</option>
