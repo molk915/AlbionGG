@@ -5,10 +5,12 @@ function App() {
   const [tier, setTier] = useState("4");
   const [enchants, setEnchants] = useState("0");
   const [location, setLocation] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
+  const [itemName, setItemName] = useState("");
+
   const getItems = async () => {
-    const apiUrl = `http://localhost:5000/items/${tier}/${enchants}/${location}`;
-    console.log("API URL:", apiUrl); // Wypisanie adresu URL na konsoli
+    const apiUrl = `http://localhost:5000/items/${tier}/${enchants}/${location}/${itemName}`;
+
+    console.log("API URL:", apiUrl);
     try {
       const { data } = await axios.get(apiUrl);
       console.log(data);
@@ -22,7 +24,12 @@ function App() {
   return (
     <>
       <h1>Item Prices</h1>
-      <input type="text" />
+      <input
+        type="text"
+        value={itemName}
+        onChange={(e) => setItemName(e.target.value)}
+        placeholder="Nazwa przedmiotu"
+      />
       <select value={tier} onChange={(e) => setTier(e.target.value)}>
         <option value="4">Tier 4</option>
         <option value="5">Tier 5</option>
