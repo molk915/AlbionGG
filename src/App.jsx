@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import "./App.css";
 function App() {
   const [tier, setTier] = useState("4");
   const [enchants, setEnchants] = useState("0");
   const [location, setLocation] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
   const getItems = async () => {
     const apiUrl = `http://localhost:5000/items/${tier}/${enchants}/${location}`;
     console.log("API URL:", apiUrl); // Wypisanie adresu URL na konsoli
@@ -14,7 +15,7 @@ function App() {
       return data;
     } catch (error) {
       console.error("Error fetching data:", error);
-      throw error; // Rzucenie błędu, aby można było go obsłużyć w innych miejscach
+      throw error;
     }
   };
 
