@@ -41,7 +41,7 @@ function App() {
         <option value="Bridgewatch">Bridgewatch</option>
         <option value="Martlock">Martlock</option>
         <option value="Thetford">Thetford</option>
-        <option value="Fort_Sterling">Fort Sterling</option>
+        <option value="FortSterling">Fort Sterling</option>
         <option value="Lymhurst">Lymhurst</option>
       </select>
       <button onClick={getItems}>Get Items</button>
