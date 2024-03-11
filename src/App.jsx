@@ -3,14 +3,19 @@ import axios from "axios";
 
 function App() {
   const [tier, setTier] = useState("4");
-  const [enchants, setEnchants] = useState("0"); // State for enchantments
-
+  const [enchants, setEnchants] = useState("0");
+  const [Location, setLocation] = useState("");
   const getItems = async () => {
-    const { data } = await axios.get(
-      `http://localhost:5000/items/${tier}/${enchants}` // Adjusted URL to include enchants
-    );
-    console.log(data);
-    return data;
+    const apiUrl = `http://localhost:5000/items/${tier}/${enchants}/${location}`;
+    console.log("API URL:", apiUrl); // Wypisanie adresu URL na konsoli
+    try {
+      const { data } = await axios.get(apiUrl);
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error; // Rzucenie błędu, aby można było go obsłużyć w innych miejscach
+    }
   };
 
   return (
@@ -20,16 +25,24 @@ function App() {
         <option value="4">Tier 4</option>
         <option value="5">Tier 5</option>
         <option value="6">Tier 6</option>
-        {/* Add more options for other tiers */}
+        <option value="7">tier 7</option>
+        <option value="8">tier 8</option>
       </select>
       <select value={enchants} onChange={(e) => setEnchants(e.target.value)}>
         {" "}
-        {/* Added onchange event to update enchant state */}
         <option value="0">Enchants 0</option>
         <option value="1">Enchants 1</option>
         <option value="2">Enchants 2</option>
         <option value="3">Enchants 3</option>
         <option value="4">Enchants 4</option>
+      </select>
+      <select value={location} onChange={(e) => setLocation(e.target.value)}>
+        <option value="Caerleon">Caerleon</option>
+        <option value="Bridgewatch">Bridgewatch</option>
+        <option value="Martlock">Martlock</option>
+        <option value="Thetford">Thetford</option>
+        <option value="Fort_Sterling">Fort Sterling</option>
+        <option value="Lymhurst">Lymhurst</option>
       </select>
       <button onClick={getItems}>Get Items</button>
     </>
