@@ -5,31 +5,26 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-def find_unique_name(name, language, enchant):
+def find_unique_name(name, tier, language, enchant):
     # Load data from the JSON file
-    with open('./all_items.json', 'r', encoding='utf-8') as file:
-        all_items = json.load(file)
 
-    # Iterate through each item in the JSON data
-    for item in all_items:
-        # Check if the name and language match
-        if language in item['LocalizedNames'] and item['LocalizedNames'][language] == name:
-            return f"{item['UniqueName']}@{enchant}"
+    item_tier = {"1": "Begginer's", "2": "Novie's", "3": "Journeymsn's", "4": "Adept's", "5": "Expert's", "6": "Master's", "7": "Grandmaster's", "8": "Elder's"}
 
-    # If the name is not found, return None
-    return None
+    full_name = f"{item_tier[tier]} {name}"
 
-def find_unique_name(name, language, enchant):
-    # Load data from the JSON file
     with open("./all_items.json", 'r', encoding='utf-8') as file:
         all_items = json.load(file)
+
+    print(full_name)
 
     # Iterate through each item in the JSON data
     for item in all_items:
         # Check if the item has 'LocalizedNames' and if the English name matches
-        if item.get('LocalizedNames') and item['LocalizedNames'].get(language) == name:
-            print(name)
-            return f"{item['UniqueName']}"
+        if item.get('LocalizedNames') and item['LocalizedNames'].get(language) == full_name:
+            if enchant == "0":
+                return f"{item['UniqueName']}"
+            else:
+                return f"{item['UniqueName']}@{enchant}"
 
     # If the name is not found, return None
     return None
@@ -50,11 +45,9 @@ def searchitem(location, itemID, quality):
 
 @app.route('/<itemName>/<tier>/<enchants>/<location>', methods=['GET'])  
 def get_items(itemName, tier, enchants, location):
-    quality = request.args.get('quality', '1')
+    quality = request.args.get('quality', '')
 
-    print(itemName)
-
-    itemID = find_unique_name(itemName, "EN-US", enchants);
+    itemID = find_unique_name(itemName, tier, "EN-US", enchants);
 
     result = searchitem(location, itemID, quality)
 
