@@ -28,13 +28,16 @@ def find_unique_name(name, language, enchant):
     for item in all_items:
         # Check if the item has 'LocalizedNames' and if the English name matches
         if item.get('LocalizedNames') and item['LocalizedNames'].get(language) == name:
-            return f"{item['UniqueName']}@{enchant}"
+            print(name)
+            return f"{item['UniqueName']}"
 
     # If the name is not found, return None
     return None
 
 def searchitem(location, itemID, quality):
     url = f"https://west.albion-online-data.com/api/v2/stats/prices/{itemID}?locations={location}&qualities={quality}"
+
+    print(url)
 
     response = requests.get(url)
 
@@ -47,9 +50,11 @@ def searchitem(location, itemID, quality):
 
 @app.route('/<itemName>/<tier>/<enchants>/<location>', methods=['GET'])  
 def get_items(itemName, tier, enchants, location):
-    quality = request.args.get('quality', '')
+    quality = request.args.get('quality', '1')
 
-    itemID = find_unique_name(itemName.replace("%", " "), "EN-US", enchants);
+    print(itemName)
+
+    itemID = find_unique_name(itemName, "EN-US", enchants);
 
     result = searchitem(location, itemID, quality)
 
