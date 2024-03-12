@@ -8,6 +8,7 @@ CORS(app)
 def searchitem(location, itemname, tier, enchants, quality):
     url = f"https://west.albion-online-data.com/api/v2/stats/prices/T{tier}_{itemname}@{enchants}?locations={location}&qualities={quality}" if enchants != "0" else f"https://west.albion-online-data.com/api/v2/stats/prices/T{tier}_{itemname}?locations={location}&qualities={quality}"
 
+
     response = requests.get(url)
 
     if response.status_code == 200:
