@@ -1,6 +1,7 @@
 import requests, json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 CORS(app)
@@ -41,7 +42,7 @@ def searchitem(location, itemID, quality):
         print("Failed to retrieve data")
         return None
 
-def get_icons(itemID):
+def get_item_icons(itemID):
     url = f"https://render.albiononline.com/v1/item/{itemID}.png"
 
     response = requests.get(url)
@@ -55,16 +56,19 @@ def get_icons(itemID):
         return data
     return None
 
+def get_item_abilities(itemName):
+    url = f"https://wiki.albiononline.com/wiki/{itemName}"
+
+    
 @app.route('/<itemName>/<tier>/<enchants>/<quality>/<location>', methods=['GET'])  
 def get_items(itemName, tier, enchants, quality, location):
 
     itemID = find_unique_name(itemName, tier, "EN-US", enchants);
-    get_icons(itemID)
 
     result = searchitem(location, itemID, quality)
 
     if result:
-        return jsonify(result, get_icons(itemID))
+        return jsonify(result, get_item_icons(itemID))
     else:
         return "Failed to retrieve data", 500
 

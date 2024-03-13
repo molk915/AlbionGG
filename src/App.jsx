@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./App.css";
 
@@ -8,22 +8,24 @@ function App() {
   const [location, setLocation] = useState("Bridgewatch");
   const [itemname, setItemName] = useState("Bag");
   const [quality, setQuality] = useState("1");
+  const [itemData, setItemData] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const getItems = async () => {
     const apiUrl = `http://localhost:5000/${itemname}/${tier}/${enchants}/${quality}/${location}`;
-    console.log("API URL:", apiUrl);
     try {
-      const { data } = await axios.get(apiUrl);
-      console.log(data);
-      return data;
+      const response = await axios.get(apiUrl);
+      if (response.data) {
+        setItemData(response.data[0]);
+        setImageUrl(response.data[1]);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
-      throw error;
     }
   };
 
   return (
-    <>
+    <div className="App">
       <h1>Item Prices</h1>
       <input
         type="text"
@@ -70,14 +72,24 @@ function App() {
         onChange={(e) => setQuality(e.target.value)}
         className="select-box"
       >
-        <option value="0">1</option>
-        <option value="1">2</option>
-        <option value="2">3</option>
-        <option value="3">4</option>
-        <option value="4">5</option>
+        <option value="0">quality 1</option>
+        <option value="1">quality 2</option>
+        <option value="2">quality 3</option>
+        <option value="3">quality 4</option>
+        <option value="4">quality 5</option>
       </select>
-      <button onClick={getItems} className="button">Get Items</button>
-    </>
+
+      <button onClick={getItems} className="button">
+        Get Items
+      </button>
+
+      {itemData && (
+        <div>
+          <pre>{JSON.stringify(itemData, null, 2)}</pre>
+        </div>
+      )}
+      {imageUrl && <img src={imageUrl} alt="Item" />}
+    </div>
   );
 }
 
