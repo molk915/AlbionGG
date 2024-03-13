@@ -6,10 +6,11 @@ function App() {
   const [tier, setTier] = useState("4");
   const [enchants, setEnchants] = useState("0");
   const [location, setLocation] = useState("Bridgewatch");
-  const [itemname, setItemName] = useState("Adept's Bag");
+  const [itemname, setItemName] = useState("Bag");
+  const [quality, setQuality] = useState("1");
 
   const getItems = async () => {
-    const apiUrl = `http://localhost:5000/${itemname}/${tier}/${enchants}/${location}`;
+    const apiUrl = `http://localhost:5000/${itemname}/${tier}/${enchants}/${quality}/${location}`;
     console.log("API URL:", apiUrl);
     try {
       const { data } = await axios.get(apiUrl);
@@ -63,6 +64,17 @@ function App() {
         <option value="Thetford">Thetford</option>
         <option value="FortSterling">Fort Sterling</option>
         <option value="Lymhurst">Lymhurst</option>
+      </select>
+      <select
+        value={quality}
+        onChange={(e) => setQuality(e.target.value)}
+        className="select-box"
+      >
+        <option value="0">1</option>
+        <option value="1">2</option>
+        <option value="2">3</option>
+        <option value="3">4</option>
+        <option value="4">5</option>
       </select>
       <button onClick={getItems} className="button">Get Items</button>
     </>

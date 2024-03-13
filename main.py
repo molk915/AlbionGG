@@ -12,7 +12,7 @@ def find_unique_name(name, tier, language, enchant):
 
     full_name = f"{item_tier[tier]} {name}"
 
-    with open("./all_items.json", 'r', encoding='utf-8') as file:
+    with open("all_items.json", 'r', encoding='utf-8') as file:
         all_items = json.load(file)
 
     print(full_name)
@@ -32,8 +32,6 @@ def find_unique_name(name, tier, language, enchant):
 def searchitem(location, itemID, quality):
     url = f"https://west.albion-online-data.com/api/v2/stats/prices/{itemID}?locations={location}&qualities={quality}"
 
-    print(url)
-
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -43,16 +41,30 @@ def searchitem(location, itemID, quality):
         print("Failed to retrieve data")
         return None
 
-@app.route('/<itemName>/<tier>/<enchants>/<location>', methods=['GET'])  
-def get_items(itemName, tier, enchants, location):
-    quality = request.args.get('quality', '')
+def get_icons(itemID):
+    url = f"https://render.albiononline.com/v1/item/{itemID}.png"
+
+    response = requests.get(url)
+
+    print(url)
+
+    if response.status_code == 200:
+        data = {f"{itemID}": url}
+        with open("icon.json", "w") as json_file:
+            json.dump(data, json_file)
+        return data
+    return None
+
+@app.route('/<itemName>/<tier>/<enchants>/<quality>/<location>', methods=['GET'])  
+def get_items(itemName, tier, enchants, quality, location):
 
     itemID = find_unique_name(itemName, tier, "EN-US", enchants);
+    get_icons(itemID)
 
     result = searchitem(location, itemID, quality)
 
     if result:
-        return jsonify(result)
+        return jsonify(result, get_icons(itemID))
     else:
         return "Failed to retrieve data", 500
 
