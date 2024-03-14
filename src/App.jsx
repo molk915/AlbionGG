@@ -15,9 +15,20 @@ function App() {
     const apiUrl = `http://localhost:5000/${itemname}/${tier}/${enchants}/${quality}/${location}`;
     try {
       const response = await axios.get(apiUrl);
-      if (response.data) {
-        setItemData(response.data[0]);
-        setImageUrl(response.data[1]);
+      if (response.data && response.data.length > 0) {
+        const itemInfo =
+          response.data[0].length > 0 ? response.data[0][0] : null;
+        if (itemInfo) {
+          setItemData({
+            sellPriceMax: itemInfo.sell_price_max,
+            sellPriceMin: itemInfo.sell_price_min,
+            buyPriceMax: itemInfo.buy_price_max,
+            buyPriceMin: itemInfo.buy_price_min,
+          });
+        }
+        if (response.data[1]) {
+          setImageUrl(response.data[1]);
+        }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -85,10 +96,19 @@ function App() {
 
       {itemData && (
         <div>
-          <pre>{JSON.stringify(itemData, null, 2)}</pre>
+          <p>Max Sell Price: {itemData.sellPriceMax}</p>
+          <p>Min Sell Price: {itemData.sellPriceMin}</p>
+          <p>Max Buy Price: {itemData.buyPriceMax}</p>
+          <p>Min Buy Price: {itemData.buyPriceMin}</p>
         </div>
       )}
-      {imageUrl && <img src={imageUrl} alt="Item" />}
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt="Item"
+          style={{ maxWidth: "200px", maxHeight: "200px" }}
+        />
+      )}
     </div>
   );
 }
