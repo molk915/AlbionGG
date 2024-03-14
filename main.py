@@ -46,7 +46,7 @@ def get_item_icons(itemID):
     response = requests.get(url)
 
     if response.status_code == 200:
-        data = {f"{itemID}": url}
+        data = url
         with open("icon.json", "w") as json_file:
             json.dump(data, json_file)
         return data
